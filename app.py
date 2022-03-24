@@ -3,9 +3,9 @@
 from flask import Flask
 app = Flask(__name__)
 
-import logMng
+from logMng import logMng
  
-logger = logMng.get_logger('app')
+logger = logMng().get_logger('app')
 
 @app.route('/')
 def hello_world():
