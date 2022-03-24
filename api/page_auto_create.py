@@ -9,8 +9,8 @@ from logMng import logMng
 logger = logMng().get_logger(__file__)
 
 # Log-in
-_MY_TOKEN = '85144be2363ca44777b845cd973afc35a88119e304049f248bc5e7c91aa3111bebc091040426080d2f108636c3c944a22d048264e0b1ea90446ea98c5a6e9741fab34bd2531ea4be21c159f961a0'
-_PAGE_URL = 'https://www.notion.so/notion-api-test-eb72e919f19042fe99d4f1587856b4e5'
+_MY_TOKEN = ''
+_PAGE_URL = ''
 
 # Example
 def Example01():
