@@ -1,3 +1,6 @@
+from flask import render_template
+
+
 def write_calendar(request):
     svg = '''
         <svg version="1.1"
@@ -13,3 +16,4 @@ def write_calendar(request):
 def write():
     # flask HttpResponse 
     # Content-Type => svg
+    return render_template('svg_viewer.html')
