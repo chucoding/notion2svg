@@ -36,8 +36,24 @@ if __name__ == '__main__':
         "Notion-Version": "2022-02-22",
         "Content-Type": "application/json"
     }
+    
+    data = {
+        'parent': { 'database_id': '3eec9f9d62fa4db2bd31d47d6c6077fe' },
+        'properties': {
+            'Name': {
+                'title': [
+                    {
+                        'text': {
+                            'content': 'Notion API TEST~'
+                        }
+                    }
+                ]
+            }
+        }
+    }
+    
+    
 
-    logger.info('test'*2)
-    # logger.debug('request...')
-    # response = requests.request("POST", _PAGE_URL, headers=headers)
-    # logger.debug(response.text)
+    logger.info('request...')
+    response = requests.request("POST", _PAGE_URL, headers=headers, data=json.dumps(data).encode('utf8'))
+    logger.info(response.text)
