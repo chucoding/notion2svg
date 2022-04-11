@@ -1,5 +1,4 @@
-from flask import render_template
-
+from flask import send_file
 
 def write_calendar(request):
     svg = '''
@@ -16,4 +15,6 @@ def write_calendar(request):
 def write():
     # flask HttpResponse 
     # Content-Type => svg
-    return render_template('svg_viewer.html')
+    
+    # postman > preview
+    return send_file('static/img/test.svg', mimetype='svg+xml')
