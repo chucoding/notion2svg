@@ -1,21 +1,18 @@
 from datetime import datetime
 from notion.client import *
 from notion.block import *
-import sys, os
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-
-from logMng import logMng
-
-logger = logMng().get_logger(__file__)
 
 # Log-in
-_MY_TOKEN = ''
-_PAGE_URL = ''
+_MY_TOKEN = 'c797d5c19ec2a1bcb5f854cea46a1775e06f5271d0bdbbe86271e92fc68bfef878ce433103e03fcdf7d874822cf48b015ed5b12f9ccf78096a08046cc9b07f0c08e02ff5bea7bcbdb305c65b5650'
+_PAGE_URL = 'https://www.notion.so/React-949d8011b53f4bcc806644fc814011e0'
 
-# Example
-def Example01():
+# Main
+if __name__ == '__main__':
     client = NotionClient(token_v2=_MY_TOKEN)
     page = client.get_block(_PAGE_URL)
+
+    # 제목 조회
+    print("페이지 제목", page.title)
 
     # Page 생성
     for i in range(10):
@@ -26,34 +23,3 @@ def Example01():
         child_page = client.get_block(child.id)
         new_child = child_page.children.add_new(CodeBlock)
         new_child.language="C"
-
-# Main
-if __name__ == '__main__':
-    import requests
-
-    headers = {
-        "Accept": "application/json",
-        "Notion-Version": "2022-02-22",
-        "Content-Type": "application/json"
-    }
-    
-    data = {
-        'parent': { 'database_id': '3eec9f9d62fa4db2bd31d47d6c6077fe' },
-        'properties': {
-            'Name': {
-                'title': [
-                    {
-                        'text': {
-                            'content': 'Notion API TEST~'
-                        }
-                    }
-                ]
-            }
-        }
-    }
-    
-    
-
-    logger.info('request...')
-    response = requests.request("POST", _PAGE_URL, headers=headers, data=json.dumps(data).encode('utf8'))
-    logger.info(response.text)
