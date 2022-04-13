@@ -15,6 +15,7 @@ def hello_world():
  
 @app.get('/svg/test')
 def test_svg():
+    print('test svg in')
     return export_svg.write()
     
 if __name__ == '__main__':
