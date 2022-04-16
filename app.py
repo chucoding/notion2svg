@@ -1,20 +1,21 @@
-# flask server test
+# change fastapi server
 
-from flask import Flask
-app = Flask(__name__)
+from fastapi import FastAPI
+app = FastAPI()
 
 from logMng import logMng
 from api import export_svg
  
 logger = logMng().get_logger('app')
 
-@app.route('/')
+@app.get('/')
 def hello_world():
     logger.debug('hello_world')
     return 'Hello World!'
  
-@app.route('/svg/test')
+@app.get('/svg/test')
 def test_svg():
+    print('test svg in')
     return export_svg.write()
     
 if __name__ == '__main__':

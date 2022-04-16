@@ -1,15 +1,18 @@
-from flask import send_file
+import os
+from fastapi import Response
 
-def write_calendar(request):
-    svg = '''
-        <svg version="1.1"
-     baseProfile="full"
-     width="300" height="200"
-     xmlns="http://www.w3.org/2000/svg">
-  <rect width="100%" height="100%" fill="yellow" />
-  <circle cx="150" cy="100" r="80" fill="green" />
-  <text x="150" y="125" font-size="60" text-anchor="middle" fill="white">외계공룡</text>
-</svg>
+from logMng import logMng
+
+logger = logMng().get_logger('app')
+
+def write_calendar():
+    print('write calendar')
+    return '''
+        <svg version="1.1" baseProfile="full" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="yellow" />
+            <circle cx="150" cy="100" r="80" fill="green" />
+            <text x="150" y="125" font-size="60" text-anchor="middle" fill="white">외계공룡</text>
+        </svg>
         '''
 
 def write():
@@ -17,4 +20,5 @@ def write():
     # Content-Type => svg
     
     # postman > preview
-    return send_file('static/img/test.svg', mimetype='svg+xml')
+    print('write in')
+    return Response(content=write_calendar(), media_type="svg+xml")
