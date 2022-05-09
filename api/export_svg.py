@@ -1,5 +1,5 @@
-import os
 from fastapi import Response
+from fastapi.responses import HTMLResponse
 from datetime import datetime
 
 from utils import logMng
@@ -7,7 +7,6 @@ from utils import logMng
 logger = logMng().get_logger('export_svg')
 
 def write_calendar():
-    print('write calendar')
     now = datetime.now()
     time = now.strftime('%X')
     date = now.date().isoformat()
@@ -39,12 +38,11 @@ def write_calendar():
         )
 
 def write():
-    # flask HttpResponse 
-    # Content-Type => svg
-    
-    # postman > preview
-    print('write in')
-    return Response(content=write_calendar(), media_type="svg+xml")
+    return Response(content=write_calendar(), media_type="image/svg+xml")
+
+def print():
+    html_content="<img alt='calendar' src ='http://localhost:8000/calendar'/>"
+    return HTMLResponse(content=html_content, status_code=200)
 
 if __name__ == '__main__':
     write_calendar()
