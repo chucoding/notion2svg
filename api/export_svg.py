@@ -1,12 +1,7 @@
 from fastapi import Response
-from fastapi.responses import HTMLResponse
 from datetime import datetime
 
-from utils import logMng
-
-logger = logMng().get_logger('export_svg')
-
-def write_calendar():
+def get_calendar():
     now = datetime.now()
     time = now.strftime('%X')
     date = now.date().isoformat()
@@ -16,10 +11,11 @@ def write_calendar():
     for w in weeks:
         str_weeks += "<text x='%d' y='145' font-size='15' fill='white'>%s</text>\n" % (x_idx, w)
         x_idx+=60
-            
-    print(time, date)
     return '''
-        <svg version="1.1" baseProfile="full" width="360" height="460" xmlns="http://www.w3.org/2000/svg">
+        <!DOCTYPE svg PUBLIC
+        "-//W3C//DTD SVG 1.1//EN"
+        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+        <svg version="1.1" width="360" height="460" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <rect width="100%" height="100%" fill="#3a3a3a" />
             <text x="10" y="60" font-size="45" fill="white">{time}</text>
             <text x="10" y="90" font-size="15" fill="skyblue">{date}</text>
@@ -38,11 +34,7 @@ def write_calendar():
         )
 
 def write():
-    return Response(content=write_calendar(), media_type="image/svg+xml")
-
-def print():
-    html_content="<img alt='calendar' src ='http://localhost:8000/calendar'/>"
-    return HTMLResponse(content=html_content, status_code=200)
+    return Response(content=get_calendar(), media_type="image/svg+xml")
 
 if __name__ == '__main__':
-    write_calendar()
+    write()
