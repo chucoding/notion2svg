@@ -1,7 +1,12 @@
 from fastapi import Response
 from datetime import datetime
+import notion_api
 
 def get_calendar():
+
+    calendar_objects = notion_api.query_a_databases()
+    print(calendar_objects)
+
     now = datetime.now()
     time = now.strftime('%X')
     date = now.date().isoformat()
@@ -32,6 +37,10 @@ def get_calendar():
             date=date,
             str_weeks=str_weeks
         )
+
+def get_calendar_object() :
+    #TODO How to mapping object to calendar? is possible use z-index in svg??
+    return 'test'
 
 def write():
     return Response(content=get_calendar(), media_type="image/svg+xml")

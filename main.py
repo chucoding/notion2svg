@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
 from fastapi.logger import logger
 
 from api import export_svg
@@ -12,7 +11,7 @@ def hello_world():
     return 'Hello World!'
  
 @app.get('/calendar')
-def get_calendar():
+def show_calendar():
     return export_svg.write()
 
 if __name__ == '__main__':
