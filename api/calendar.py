@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
-from api import notion_api
+import notion_api
 
 class Calendar(metaclass=ABCMeta):
 

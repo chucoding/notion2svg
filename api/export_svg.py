@@ -4,6 +4,3 @@ from api.calendar import BlackCalendar
 def write():
     cal1 = BlackCalendar()
     return Response(content=cal1.get_calendar(), media_type="image/svg+xml")
-
-if __name__ == '__main__':
-    write()
