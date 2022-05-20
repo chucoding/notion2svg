@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 from api import notion_api
+import calendar;
 
 class Calendar(metaclass=ABCMeta):
 
@@ -33,6 +34,9 @@ class WhiteCalendar(Calendar) :
         for i, w in enumerate(Calendar.weeks) :
             week += "<text x='%d' y='70' font-size='10px'>%s</text>\n" % (120*(i)+55, w)
 
+        for x in calendar.Calendar().monthdatescalendar(2022, 5) :
+            print(x[0])
+        
         return '''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
@@ -70,7 +74,7 @@ class WhiteCalendar(Calendar) :
 class BlackCalendar(Calendar) :
     def get_calendar(self):
         calendar_objects = notion_api.query_a_databases()
-        print(calendar_objects)
+        #print(calendar_objects)
 
         x_idx = 20
         str_weeks = ''
