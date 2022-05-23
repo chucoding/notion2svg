@@ -30,20 +30,22 @@ class WhiteCalendar(Calendar) :
         calendar_objects = notion_api.query_a_databases()
         print(calendar_objects)
 
-        week = ''
+        weeks = ''
         for i, w in enumerate(Calendar.weeks) :
-            week += "<text x='%d' y='70' font-size='10px'>%s</text>\n" % (120*(i)+55, w)
+            weeks += "<text x='%d' y='70' font-size='10px'>%s</text>\n" % (120*(i)+55, w)
 
-        for x in calendar.Calendar().monthdatescalendar(2022, 5) :
-            print(x[0])
-        
+        days = ''
+        for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
+            for j, day in enumerate(week) :
+                print(day)
+                days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+100, (80*(i)+100), day.strftime('%d'))
         return '''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
             "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
             <svg version="1.1" width="840" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <text x="10" y="40" font-size="20" font-weight="bold">{month}</text>
-                {week}
+                {weeks}
                 <rect x="600" y="80" width="240" height="480" fill="#F7F6F3"/>
                 <path style="stroke:#E9E9E7;" d="M0,80 L840,80"/>
                 <path style="stroke:#E9E9E7;" d="M0,160 L840,160"/>
@@ -59,10 +61,12 @@ class WhiteCalendar(Calendar) :
                 <path style="stroke:#E9E9E7;" d="M600,80 L600,560"/>
                 <path style="stroke:#E9E9E7;" d="M720,80 L720,560"/>
                 <path style="stroke:#E9E9E7;" d="M840,80 L840,560"/>
+                {days}
             </svg>
             '''.format(
                 month=Calendar.month,
-                week=week
+                weeks=weeks,
+                days=days
             )
 
     def get_board(self):
