@@ -30,22 +30,23 @@ class WhiteCalendar(Calendar) :
         calendar_objects = notion_api.query_a_databases()
         print(calendar_objects)
 
-        weeks = ''
+        svg_weeks = ''
         for i, w in enumerate(Calendar.weeks) :
-            weeks += "<text x='%d' y='70' font-size='10px'>%s</text>\n" % (120*(i)+55, w)
+            svg_weeks += "<text x='%d' y='70' font-size='10px' fill='#9A9B97'>%s</text>\n" % (120*(i)+55, w)
 
-        days = ''
+        svg_days = ''
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
-            for j, day in enumerate(week) :
-                print(day)
-                days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+100, (80*(i)+100), day.strftime('%d'))
+            for j, day in enumerate(week) : 
+                color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
+                svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
+        
         return '''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
             "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
             <svg version="1.1" width="840" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <text x="10" y="40" font-size="20" font-weight="bold">{month}</text>
-                {weeks}
+                {svg_weeks}
                 <rect x="600" y="80" width="240" height="480" fill="#F7F6F3"/>
                 <path style="stroke:#E9E9E7;" d="M0,80 L840,80"/>
                 <path style="stroke:#E9E9E7;" d="M0,160 L840,160"/>
@@ -61,12 +62,12 @@ class WhiteCalendar(Calendar) :
                 <path style="stroke:#E9E9E7;" d="M600,80 L600,560"/>
                 <path style="stroke:#E9E9E7;" d="M720,80 L720,560"/>
                 <path style="stroke:#E9E9E7;" d="M840,80 L840,560"/>
-                {days}
+                {svg_days}
             </svg>
             '''.format(
                 month=Calendar.month,
-                weeks=weeks,
-                days=days
+                weeks=svg_weeks,
+                days=svg_days
             )
 
     def get_board(self):
