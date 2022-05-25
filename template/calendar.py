@@ -7,7 +7,7 @@ class Calendar(metaclass=ABCMeta):
 
     now = datetime.now()
     time = now.strftime('%X')
-    date = now.date().isoformat()
+    today = now.date().isoformat()
     month = now.strftime("%b %Y")
     
     #weeks = ["일","월","화","수","목","금","토"]
@@ -38,8 +38,12 @@ class WhiteCalendar(Calendar) :
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
             for j, day in enumerate(week) : 
                 color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
+                if Calendar.today == day.isoformat() :
+                    color = "white"
+                    svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (120*(j)+105, (80*(i)+95))
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
         
+
         return '''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
@@ -66,8 +70,8 @@ class WhiteCalendar(Calendar) :
             </svg>
             '''.format(
                 month=Calendar.month,
-                weeks=svg_weeks,
-                days=svg_days
+                svg_weeks=svg_weeks,
+                svg_days=svg_days
             )
 
     def get_board(self):
@@ -93,7 +97,7 @@ class BlackCalendar(Calendar) :
             <svg version="1.1" width="360" height="460" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <rect width="100%" height="100%" fill="#3a3a3a" />
                 <text x="10" y="60" font-size="45" fill="white">{time}</text>
-                <text x="10" y="90" font-size="15" fill="skyblue">{date}</text>
+                <text x="10" y="90" font-size="15" fill="skyblue">{today}</text>
                 <rect x="0" y="110" width="100%" height="2" fill="white" fill-opacity="0.5" stroke-opacity="0.8"/>
                 {str_weeks}
                 <rect x="0" y="170" width="100%" height="1" fill="white" fill-opacity="0.5" stroke-opacity="0.8"/>
@@ -104,7 +108,7 @@ class BlackCalendar(Calendar) :
             </svg>
             '''.format(
                 time=Calendar.time,
-                date=Calendar.date,
+                today=Calendar.today,
                 str_weeks=str_weeks
             )
 
