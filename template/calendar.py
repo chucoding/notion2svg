@@ -21,15 +21,12 @@ class Calendar(metaclass=ABCMeta):
     def get_board(self):
         pass
 
-    @abstractmethod
-    def get_object(self):
-        pass
-
 class WhiteCalendar(Calendar) :
     def get_calendar(self):
-        calendar_objects = notion_api.query_a_databases()
-        print(calendar_objects)
+        svg = self.get_board()
+        return svg
 
+    def get_board(self):
         svg_weeks = ''
         for i, w in enumerate(Calendar.weeks) :
             svg_weeks += "<text x='%d' y='70' font-size='10px' fill='#9A9B97'>%s</text>\n" % (120*(i)+55, w)
@@ -37,12 +34,12 @@ class WhiteCalendar(Calendar) :
         svg_days = ''
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
             for j, day in enumerate(week) : 
+                # TODO notion_api.query_a_databases() mapping => choice 3for or 2for2?
                 color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
                 if Calendar.today == day.isoformat() :
                     color = "white"
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (120*(j)+105, (80*(i)+95))
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
-        
 
         return '''
             <!DOCTYPE svg PUBLIC
@@ -74,17 +71,11 @@ class WhiteCalendar(Calendar) :
                 svg_days=svg_days
             )
 
-    def get_board(self):
-        pass
-
-    def get_object(self):
-        pass
-
 class BlackCalendar(Calendar) :
     def get_calendar(self):
-        calendar_objects = notion_api.query_a_databases()
-        #print(calendar_objects)
+        pass
 
+    def get_board(self):
         x_idx = 20
         str_weeks = ''
         for w in Calendar.weeks:
@@ -111,9 +102,3 @@ class BlackCalendar(Calendar) :
                 today=Calendar.today,
                 str_weeks=str_weeks
             )
-
-    def get_board(self):
-        pass
-
-    def get_object(self):
-        pass
