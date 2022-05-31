@@ -34,13 +34,13 @@ class WhiteCalendar(Calendar) :
         svg_days = ''
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
             for j, day in enumerate(week) : 
-                # TODO notion_api.query_a_databases() mapping => choice 3for or 2for2?
                 color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
                 if Calendar.today == day.isoformat() :
                     color = "white"
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (120*(j)+105, (80*(i)+95))
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
 
+                # TODO notion_api.query_a_databases() mapping => choice 3for
         return '''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
