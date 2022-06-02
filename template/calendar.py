@@ -27,6 +27,9 @@ class WhiteCalendar(Calendar) :
         return svg
 
     def get_board(self):
+
+        pagelist = notion_api.query_a_databases()
+
         svg_weeks = ''
         for i, w in enumerate(Calendar.weeks) :
             svg_weeks += "<text x='%d' y='70' font-size='10px' fill='#9A9B97'>%s</text>\n" % (120*(i)+55, w)
@@ -35,12 +38,18 @@ class WhiteCalendar(Calendar) :
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
             for j, day in enumerate(week) : 
                 color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
-                if Calendar.today == day.isoformat() :
+                strdate = day.isoformat()
+
+                if Calendar.today == strdate :
                     color = "white"
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (120*(j)+105, (80*(i)+95))
-                svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
 
-                # TODO notion_api.query_a_databases() mapping => choice 3for
+                svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
+                
+                for page in pagelist : 
+                    if page["start_date"] == strdate :
+                        svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j), (80*(i)+115), page["name"])
+                
         return '''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
