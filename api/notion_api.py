@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 def query_a_databases() :
     url = "https://api.notion.com/v1/databases/869fdb1b36654418a1abf6194a0433f6/query"
@@ -23,7 +24,18 @@ def query_a_databases() :
         page['icon'] = p['icon']
 
         calendar_objects.append(page)
+    __list_to_map(calendar_objects)
     return calendar_objects
+
+def __list_to_map(pages) :
+    map = {}
+    for page in pages :
+        if (page['end_date']) : 
+            diff = datetime.strptime(page['end_date'], '%Y-%m-%d') - datetime.strptime(page['start_date'], '%Y-%m-%d')
+            #TODO datetime range for
+            #print(diff)
+            #print(type(diff)) #delta
+        map[page['start_date']] = page
 
 if __name__ == '__main__':
     query_a_databases()

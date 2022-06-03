@@ -17,18 +17,15 @@ class Calendar(metaclass=ABCMeta):
     def get_calendar(self):
         pass
 
-    @abstractmethod
-    def get_board(self):
-        pass
-
 class WhiteCalendar(Calendar) :
+    def make_pagelist(self, pagelist) :
+        for page in pagelist : 
+            page['start_date']
+
+        return pagelist
+
     def get_calendar(self):
-        svg = self.get_board()
-        return svg
-
-    def get_board(self):
-
-        pagelist = notion_api.query_a_databases()
+        pagelist = self.make_pagelist(notion_api.query_a_databases())
 
         svg_weeks = ''
         for i, w in enumerate(Calendar.weeks) :
@@ -82,9 +79,6 @@ class WhiteCalendar(Calendar) :
 
 class BlackCalendar(Calendar) :
     def get_calendar(self):
-        pass
-
-    def get_board(self):
         x_idx = 20
         str_weeks = ''
         for w in Calendar.weeks:
