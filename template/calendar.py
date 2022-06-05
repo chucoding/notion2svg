@@ -44,7 +44,8 @@ class WhiteCalendar(Calendar) :
                 if notion_pages.get(strdate) is not None :
                     for k, notion_page in enumerate(notion_pages.get(strdate)) :
                         alpha = 20*k
-                        svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j), (80*(i)+115+alpha), notion_page["name"])
+                        svg_days += "<rect x='%d' y='%d' width='114' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='transparent' />" % (120*(j)+3, (80*(i)+105+alpha))
+                        svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+120+alpha), notion_page["name"])
 
         return '''
             <!DOCTYPE svg PUBLIC
