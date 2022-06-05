@@ -31,7 +31,6 @@ class WhiteCalendar(Calendar) :
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
             for j, day in enumerate(week) : 
                 date = day.isoformat()
-                
                 # current month => fill black color for day / other month => fill gray color for day
                 color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
                 
@@ -41,25 +40,35 @@ class WhiteCalendar(Calendar) :
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (120*(j)+105, (80*(i)+95))
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
                 
+                if stack :
+                    if datetime.strptime(stack[-1], '%Y-%m-%d').date() <= week[-1] :
+                        #TODO 길이만큼
+                        stack.pop()
+                    else :
+                        #TODO 전체길이만큼
+                        pass
+                    svg_days += ""
+                    svg_days += ""
+
                 # display notion_pages into calendar
                 if notion_pages.get(date) is not None :
                     for k, notion_page in enumerate(notion_pages.get(date)) :
-
                         if k > 2 : break
 
                         end_date = notion_page.get("end_date")
+                        width = 120
                         alpha = 25*(k+len(stack))
-
+                        
+                        # merge start_date to end_date
                         if end_date is not None : 
-                            #TODO merge end_date > week[-1]
-                            stack.append(end_date)
+                            if datetime.strptime(end_date, '%Y-%m-%d').date() > week[-1] :
+                                print(notion_page)
+                                width += 120*(week[-1] - datetime.strptime(date, '%Y-%m-%d').date()).days
+                                stack.append(end_date)
+                            else :
+                                width += 120*(datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(date, '%Y-%m-%d')).days
 
-                        if stack :
-                            if stack[-1] == date :
-                                stack.pop()
-                            #TODO continue merge
-
-                        svg_days += "<rect x='%d' y='%d' width='114' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+105+alpha))
+                        svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+105+alpha), width-6)
                         svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+120+alpha), notion_page["name"])
 
         return '''
