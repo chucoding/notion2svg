@@ -24,18 +24,19 @@ def query_a_databases() :
         page['icon'] = p['icon']
 
         calendar_objects.append(page)
-    __list_to_map(calendar_objects)
-    return calendar_objects
+    return  __list_to_map(calendar_objects)
 
 def __list_to_map(pages) :
     map = {}
     for page in pages :
+        l = []
         if (page['end_date']) : 
             diff = datetime.strptime(page['end_date'], '%Y-%m-%d') - datetime.strptime(page['start_date'], '%Y-%m-%d')
             #TODO datetime range for
             #print(diff)
             #print(type(diff)) #delta
-        map[page['start_date']] = page
-
+        start_date = page['start_date']
+        map[start_date] = [page] if map.get(start_date) is None else list(map.get(start_date))+[page]
+    return map
 if __name__ == '__main__':
     query_a_databases()

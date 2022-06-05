@@ -18,14 +18,9 @@ class Calendar(metaclass=ABCMeta):
         pass
 
 class WhiteCalendar(Calendar) :
-    def make_pagelist(self, pagelist) :
-        for page in pagelist : 
-            page['start_date']
-
-        return pagelist
 
     def get_calendar(self):
-        pagelist = self.make_pagelist(notion_api.query_a_databases())
+        notion_pages = notion_api.query_a_databases()
 
         svg_weeks = ''
         for i, w in enumerate(Calendar.weeks) :
@@ -34,19 +29,23 @@ class WhiteCalendar(Calendar) :
         svg_days = ''
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
             for j, day in enumerate(week) : 
-                color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
                 strdate = day.isoformat()
-
+                
+                # current month => fill black color for day / other month => fill gray color for day
+                color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
+                
+                # today => display red circle mark
                 if Calendar.today == strdate :
                     color = "white"
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (120*(j)+105, (80*(i)+95))
-
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
                 
-                for page in pagelist : 
-                    if page["start_date"] == strdate :
-                        svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j), (80*(i)+115), page["name"])
-                
+                # display notion_pages into calendar
+                if notion_pages.get(strdate) is not None :
+                    for k, notion_page in enumerate(notion_pages.get(strdate)) :
+                        alpha = 20*k
+                        svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j), (80*(i)+115+alpha), notion_page["name"])
+
         return '''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
