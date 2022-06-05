@@ -27,24 +27,39 @@ class WhiteCalendar(Calendar) :
             svg_weeks += "<text x='%d' y='70' font-size='10px' fill='#9A9B97'>%s</text>\n" % (120*(i)+55, w)
 
         svg_days = ''
+        stack = []
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
             for j, day in enumerate(week) : 
-                strdate = day.isoformat()
+                date = day.isoformat()
                 
                 # current month => fill black color for day / other month => fill gray color for day
                 color = "black" if day.strftime('%b') == Calendar.now.strftime('%b') else "#9A9B97"
                 
                 # today => display red circle mark
-                if Calendar.today == strdate :
+                if Calendar.today == date :
                     color = "white"
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (120*(j)+105, (80*(i)+95))
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
                 
                 # display notion_pages into calendar
-                if notion_pages.get(strdate) is not None :
-                    for k, notion_page in enumerate(notion_pages.get(strdate)) :
-                        alpha = 20*k
-                        svg_days += "<rect x='%d' y='%d' width='114' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='transparent' />" % (120*(j)+3, (80*(i)+105+alpha))
+                if notion_pages.get(date) is not None :
+                    for k, notion_page in enumerate(notion_pages.get(date)) :
+
+                        if k > 2 : break
+
+                        end_date = notion_page.get("end_date")
+                        alpha = 25*(k+len(stack))
+
+                        if end_date is not None : 
+                            #TODO merge end_date > week[-1]
+                            stack.append(end_date)
+
+                        if stack :
+                            if stack[-1] == date :
+                                stack.pop()
+                            #TODO continue merge
+
+                        svg_days += "<rect x='%d' y='%d' width='114' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+105+alpha))
                         svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+120+alpha), notion_page["name"])
 
         return '''
