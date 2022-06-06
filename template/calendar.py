@@ -6,9 +6,11 @@ import calendar;
 class Calendar(metaclass=ABCMeta):
 
     now = datetime.now()
-    time = now.strftime('%X')
+    date = now.strftime("%Y %b %m %X").split(" ")
+    
+    year, str_month, month, time = date[0], date[1], int(date[2]), date[3]
     today = now.date().isoformat()
-    month = now.strftime("%b %Y")
+    
     
     #weeks = ["일","월","화","수","목","금","토"]
     weeks = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
@@ -28,7 +30,7 @@ class WhiteCalendar(Calendar) :
 
         svg_days = ''
         stack = []
-        for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
+        for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, self.month)) :
             use_stack = True
             for j, day in enumerate(week) : 
                 date = day.isoformat()
@@ -43,8 +45,8 @@ class WhiteCalendar(Calendar) :
                 
                 if stack and use_stack:
                     alpha = 25*(len(stack)-1)
-                    if datetime.strptime(stack[-1], '%Y-%m-%d').date() <= week[-1] :
-                        width = 120*((datetime.strptime(stack[-1], '%Y-%m-%d').date() - week[0]).days+1)
+                    if datetime.strptime(stack[-1].get('end_date'), '%Y-%m-%d').date() <= week[-1] :
+                        width = 120*((datetime.strptime(stack[-1].get('end_date'), '%Y-%m-%d').date() - week[0]).days+1)
                         stack.pop()
                     else :
                         use_stack = False
@@ -64,13 +66,16 @@ class WhiteCalendar(Calendar) :
                         if end_date is not None : 
                             if datetime.strptime(end_date, '%Y-%m-%d').date() > week[-1] :
                                 width += 120*(week[-1] - datetime.strptime(date, '%Y-%m-%d').date()).days
-                                stack.append(end_date)
+                                stack.append(notion_page)
                                 use_stack = False
                             else :
                                 width += 120*(datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(date, '%Y-%m-%d')).days
 
+                        #TODO abbreviate
+                        print(notion_page["name"]+" : "+ str())
+                        notion_page_name = (bytes(notion_page["name"], 'utf-8')[0:15]).decode('utf-8')+"..." if len(bytes(notion_page["name"], 'utf-8')) > 15 else notion_page["name"]
                         svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+105+alpha), width-6)
-                        svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+120+alpha), notion_page["name"])
+                        svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+120+alpha), notion_page_name)
 
         return '''
             <!DOCTYPE svg PUBLIC
@@ -97,7 +102,7 @@ class WhiteCalendar(Calendar) :
                 {svg_days}
             </svg>
             '''.format(
-                month=Calendar.month,
+                month=self.str_month+" "+self.year,
                 svg_weeks=svg_weeks,
                 svg_days=svg_days
             )
