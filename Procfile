@@ -1,2 +1,2 @@
 worker: python main.py
-web: uvicorn main:app --workers 1
+web: uvicorn main:app
