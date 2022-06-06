@@ -70,7 +70,7 @@ class WhiteCalendar(Calendar) :
                                 width += 120*(datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(date, '%Y-%m-%d')).days
                             stack.append(notion_page)
                             use_stack = False
-                        notion_page_name = (bytes(notion_page["name"], 'utf-8')[0:12*int(width/120)]).decode('utf-8')+"..." if len(bytes(notion_page["name"], 'utf-8')) > 12*int(width/120) else notion_page["name"]
+                        notion_page_name = (bytes(notion_page["name"], 'utf-8')[0:15*int(width/120)]).decode('utf-8')+"..." if len(bytes(notion_page["name"], 'utf-8')) > 15*int(width/120) else notion_page["name"]
                         svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+110+alpha), width-6)
                         
                         if notion_page['icon'] is not None :
