@@ -56,29 +56,29 @@ class WhiteCalendar(Calendar) :
                 # display notion_pages into calendar
                 if notion_pages.get(date) is not None :
                     for k, notion_page in enumerate(notion_pages.get(date)) :
-                        if k > 2 : break
+                        if k > 1 : break
 
                         end_date = notion_page.get("end_date")
                         width = 120
-                        alpha = 25*(k+len(stack)) if use_stack else 25*k
+                        alpha = 25*len(stack)
                         
                         # merge start_date to end_date
                         if end_date is not None : 
                             if datetime.strptime(end_date, '%Y-%m-%d').date() > week[-1] :
                                 width += 120*(week[-1] - datetime.strptime(date, '%Y-%m-%d').date()).days
-                                stack.append(notion_page)
-                                use_stack = False
                             else :
                                 width += 120*(datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(date, '%Y-%m-%d')).days
-
-                        notion_page_name = (bytes(notion_page["name"], 'utf-8')[0:15]).decode('utf-8')+"..." if len(bytes(notion_page["name"], 'utf-8')) > 15 else notion_page["name"]
+                            stack.append(notion_page)
+                            use_stack = False
+                        notion_page_name = (bytes(notion_page["name"], 'utf-8')[0:12*int(width/120)]).decode('utf-8')+"..." if len(bytes(notion_page["name"], 'utf-8')) > 12*int(width/120) else notion_page["name"]
                         svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+110+alpha), width-6)
                         
-                        if notion_page['icon']['type'] == "emoji" :
-                            svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+125+alpha),notion_page['icon']['emoji']+" "+notion_page_name)
-                        elif notion_page['icon']['type'] == "file" :
-                            svg_days += "<image x='%d' y='%d' width='15' height='15' xlink:href='%s' />" % (120*(j)+6, (68*(i)+125+alpha),notion_page['icon']['file']['url'].replace("&","&amp;"))
-                            svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+26, (80*(i)+125+alpha),notion_page_name)
+                        if notion_page['icon'] is not None :
+                            if notion_page['icon']['type'] == "emoji" :
+                                svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+125+alpha),notion_page['icon']['emoji']+" "+notion_page_name)
+                            elif notion_page['icon']['type'] == "file" :
+                                svg_days += "<image x='%d' y='%d' width='15' height='15' xlink:href='%s' />" % (120*(j)+6, (68*(i)+125+alpha),notion_page['icon']['file']['url'].replace("&","&amp;"))
+                                svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+26, (80*(i)+125+alpha),notion_page_name)
                         else :
                             svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+125+alpha),notion_page_name)
         return '''
