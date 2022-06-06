@@ -29,6 +29,7 @@ class WhiteCalendar(Calendar) :
         svg_days = ''
         stack = []
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, 5)) :
+            use_stack = True
             for j, day in enumerate(week) : 
                 date = day.isoformat()
                 # current month => fill black color for day / other month => fill gray color for day
@@ -40,15 +41,15 @@ class WhiteCalendar(Calendar) :
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (120*(j)+105, (80*(i)+95))
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
                 
-                if stack :
+                if stack and use_stack:
+                    alpha = 25*(len(stack)-1)
                     if datetime.strptime(stack[-1], '%Y-%m-%d').date() <= week[-1] :
-                        #TODO 길이만큼
+                        width = 120*((datetime.strptime(stack[-1], '%Y-%m-%d').date() - week[0]).days+1)
                         stack.pop()
                     else :
-                        #TODO 전체길이만큼
-                        pass
-                    svg_days += ""
-                    svg_days += ""
+                        use_stack = False
+                        width = 120*7
+                    svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+105+alpha), width-6)
 
                 # display notion_pages into calendar
                 if notion_pages.get(date) is not None :
@@ -57,14 +58,14 @@ class WhiteCalendar(Calendar) :
 
                         end_date = notion_page.get("end_date")
                         width = 120
-                        alpha = 25*(k+len(stack))
+                        alpha = 25*(k+len(stack)) if use_stack else 25*k
                         
                         # merge start_date to end_date
                         if end_date is not None : 
                             if datetime.strptime(end_date, '%Y-%m-%d').date() > week[-1] :
-                                print(notion_page)
                                 width += 120*(week[-1] - datetime.strptime(date, '%Y-%m-%d').date()).days
                                 stack.append(end_date)
+                                use_stack = False
                             else :
                                 width += 120*(datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(date, '%Y-%m-%d')).days
 
