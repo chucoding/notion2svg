@@ -2,14 +2,13 @@
 Notion2Github는 Notion과 Github 사이의 동기화를 지원하는 앱 입니다.
 
 # Usage
-- start : uvicorn app:app --reload or python -m uvicorn app:app --reload
-- swagger ui : http://127.0.0.1:8000/docs
-- redoc : http://127.0.0.1:8000/redoc
+- start : uvicorn main:app --reload or python -m uvicorn main:app --reload
+- swagger ui : https://notion2github.herokuapp.com/docs
+- redoc : https://notion2github.herokuapp.com/redoc
 
 # Contents
-1. page auto create
-2. svg export
-3. md auto commit
+1. notion_api
+2. export_svg
 
 # Contact
 chucoding@gmail.com   
