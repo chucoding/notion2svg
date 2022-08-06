@@ -51,7 +51,7 @@ class WhiteCalendar(Calendar) :
                     else :
                         use_stack = False
                         width = 120*7
-                    svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+105+alpha), width-6)
+                    svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (120*(j)+3, (80*(i)+105+alpha), width)
 
                 # display notion_pages into calendar
                 if notion_pages.get(date) is not None :
@@ -77,7 +77,7 @@ class WhiteCalendar(Calendar) :
                             if notion_page['icon']['type'] == "emoji" :
                                 svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+125+alpha),notion_page['icon']['emoji']+" "+notion_page_name)
                             elif notion_page['icon']['type'] == "file" :
-                                svg_days += "<image x='%d' y='%d' width='15' height='15' xlink:href='%s' />" % (120*(j)+6, (68*(i)+125+alpha),notion_page['icon']['file']['url'].replace("&","&amp;"))
+                                svg_days += "<image x='%d' y='%d' width='15' height='15' xlink:href='%s' />" % (120*(j)+6, (68*(i)+112+alpha),notion_page['icon']['file']['url'].replace("&","&amp;"))
                                 svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+26, (80*(i)+125+alpha),notion_page_name)
                         else :
                             svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (120*(j)+5, (80*(i)+125+alpha),notion_page_name)
