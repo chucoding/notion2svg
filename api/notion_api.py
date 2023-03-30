@@ -1,13 +1,14 @@
+import config
 import requests
 from datetime import datetime
 
 def query_a_databases() :
-    url = "https://api.notion.com/v1/databases/869fdb1b36654418a1abf6194a0433f6/query"
+    url = f"https://api.notion.com/v1/databases/{config.db}/query"
 
     headers = {
         "Accept": "application/json",
         "Notion-Version": "2022-02-22",
-        "Authorization": "Bearer secret_GAAWOZue9mvbCG8nN1IL7gS06rNZarUAnL6FOp4ZT86"
+        "Authorization": f"Bearer secret_{config.auth}"
     }
 
     data = requests.post(url, headers=headers).json()
