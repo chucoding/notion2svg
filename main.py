@@ -4,13 +4,8 @@ from fastapi.logger import logger
 from api import export_svg
 
 app = FastAPI()
-
-@app.get('/')
-def hello_world():
-    logger.debug('hello_world')
-    return 'Hello World!'
  
-@app.get('/calendar')
+@app.get('/')
 def show_calendar():
     return export_svg.write()
 
