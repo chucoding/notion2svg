@@ -11,8 +11,6 @@ class Calendar(metaclass=ABCMeta):
     year, str_month, month, time = date[0], date[1], int(date[2]), date[3]
     today = now.date().isoformat()
     
-    
-    #weeks = ["일","월","화","수","목","금","토"]
     weeks = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
 
     @abstractmethod
