@@ -1,6 +1,9 @@
-import config
-import requests
 from datetime import datetime
+
+import requests
+
+import config
+
 
 def query_a_databases() :
     url = f"https://api.notion.com/v1/databases/{config.db}/query"
