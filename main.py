@@ -1,13 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.logger import logger
 
-from api import export_svg
+from template.calendar import WhiteCalendar
 
 app = FastAPI()
  
 @app.get('/')
 def show_calendar():
-    return export_svg.write()
+    cal1 = WhiteCalendar()
+    return Response(content=cal1.get_calendar(), headers={"Cache-Control": "max-age=0", "Content-Security-Policy": "object-src href: 'unsafe-eval'"}, media_type="image/svg+xml")
 
 if __name__ == '__main__':
     import uvicorn
