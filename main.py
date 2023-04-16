@@ -1,13 +1,12 @@
 from fastapi import FastAPI, Response
-from fastapi.logger import logger
 
-from template.calendar import WhiteCalendar
+from template.calendar import NotionCalendar
 
 app = FastAPI()
  
 @app.get('/')
 def show_calendar():
-    cal1 = WhiteCalendar()
+    cal1 = NotionCalendar()
     return Response(content=cal1.get_calendar(), headers={"Cache-Control": "max-age=0", "Content-Security-Policy": "object-src href: 'unsafe-eval'"}, media_type="image/svg+xml")
 
 if __name__ == '__main__':
