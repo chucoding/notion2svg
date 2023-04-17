@@ -25,7 +25,6 @@ class NotionCalendar(Calendar):
 
     def get_calendar(self):
         notion_pages = notion_api.query_a_databases()
-        logger.debug(notion_page);
         svg_weeks = ''
         for i, w in enumerate(Calendar.weeks):
             svg_weeks += "<text x='%d' y='70' font-size='10px' fill='#9A9B97'>%s</text>\n" % (
