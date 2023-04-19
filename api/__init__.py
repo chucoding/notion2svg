@@ -1,1 +1,1 @@
-from .notion_api import *
+from api.notion_api import *
