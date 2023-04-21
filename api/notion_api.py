@@ -7,15 +7,23 @@ import config
 
 def query_a_databases() :
     url = f"https://api.notion.com/v1/databases/{config.db}/query"
-
     headers = {
+        "Authorization": f"Bearer secret_{config.auth}",
         "Accept": "application/json",
         "Notion-Version": "2022-02-22",
-        "Authorization": f"Bearer secret_{config.auth}"
     }
 
-    data = requests.post(url, headers=headers).json()
-    pages = data['results']
+    data = {
+        "filter": {
+            "property": "Date",
+            "date": {
+                "after":"2023-04-01"
+                }
+            }
+    }
+    res = requests.post(url, data, headers=headers).json()
+    print(res)
+    pages = res['results']
 
     calendar_objects = []
     for p in pages :
