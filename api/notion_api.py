@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 import requests
 
@@ -6,6 +6,7 @@ import config
 
 
 def query_a_databases() :
+    today = date.today()
     url = f"https://api.notion.com/v1/databases/{config.db}/query"
     headers = {
         "Authorization": f"Bearer secret_{config.auth}",
@@ -17,7 +18,7 @@ def query_a_databases() :
         "filter": {
             "property": "Date",
             "date": {
-                "after":"2023-04-01"
+                "after":f"{today.year}-{today.month:02}-01"
             }
         }
     }
