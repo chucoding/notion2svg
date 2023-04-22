@@ -13,29 +13,33 @@ def query_a_databases() :
         "Notion-Version": "2022-02-22",
     }
 
-    data = {
+    params = {
         "filter": {
             "property": "Date",
             "date": {
                 "after":"2023-04-01"
-                }
             }
+        }
     }
-    res = requests.post(url, data, headers=headers).json()
-    print(res)
-    pages = res['results']
+    response = requests.post(url, headers=headers, json=params)
 
-    calendar_objects = []
-    for p in pages :
-        properties = p['properties']  #TODO treat parsing error Exception
+    if response.status_code == 200 :
+        data = response.json()
+        pages = data['results']
 
-        page = {}
-        page['start_date'] = properties['Date']['date']['start']
-        page['end_date'] =  properties['Date']['date']['end']
-        page['name'] = properties['Name']['title'][0]['plain_text']
-        page['icon'] = p['icon']
+        calendar_objects = []
+        for p in pages :
+            properties = p['properties']  #TODO treat parsing error Exception
 
-        calendar_objects.append(page)
+            page = {}
+            page['start_date'] = properties['Date']['date']['start']
+            page['end_date'] =  properties['Date']['date']['end']
+            page['name'] = properties['Name']['title'][0]['plain_text']
+            page['icon'] = p['icon']
+
+            calendar_objects.append(page)
+    else:
+        print(f"Error {response.status_code}: {response.text}")
     return  __list_to_map(calendar_objects)
 
 def __list_to_map(pages) :
