@@ -5,7 +5,7 @@ import requests
 import config
 
 
-def query_a_databases() :
+def query_a_database() :
     today = date.today()
     url = f"https://api.notion.com/v1/databases/{config.db}/query"
     headers = {
@@ -56,4 +56,4 @@ def __list_to_map(pages) :
         map[start_date] = [page] if map.get(start_date) is None else list(map.get(start_date))+[page]
     return map
 if __name__ == '__main__':
-    query_a_databases()
+    query_a_database()
