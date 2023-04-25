@@ -42,22 +42,20 @@ def query_a_database():
             calendar_objects.append(page)
     else:
         print(f"Error {response.status_code}: {response.text}")
-    return __list_to_map(calendar_objects)
+    return list_to_map(calendar_objects)
 
 
-def __list_to_map(pages):
+def list_to_map(pages):
     map = {}
     for page in pages:
-        l = []
-        if (page['end_date']):
-            diff = datetime.strptime(
-                page['end_date'], '%Y-%m-%d') - datetime.strptime(page['start_date'], '%Y-%m-%d')
-            # TODO datetime range for
-            # print(diff)
-            # print(type(diff)) #delta
+        # if (page['end_date']):
+        # diff = datetime.strptime(
+        #   page['end_date'], '%Y-%m-%d') - datetime.strptime(page['start_date'], '%Y-%m-%d')
+        # print(diff)
         start_date = page['start_date']
         map[start_date] = [page] if map.get(
             start_date) is None else list(map.get(start_date))+[page]
+        print(map)
     return map
 
 
