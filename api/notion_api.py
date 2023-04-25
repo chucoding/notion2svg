@@ -5,7 +5,8 @@ import requests
 import config
 
 
-def query_a_database() :
+def query_a_database():
+
     today = date.today()
     url = f"https://api.notion.com/v1/databases/{config.db}/query"
     headers = {
@@ -18,42 +19,47 @@ def query_a_database() :
         "filter": {
             "property": "Date",
             "date": {
-                "after":f"{today.year}-{today.month:02}-01"
+                "after": f"{today.year}-{today.month:02}-01"
             }
         }
     }
     response = requests.post(url, headers=headers, json=params)
 
-    if response.status_code == 200 :
+    if response.status_code == 200:
         data = response.json()
         pages = data['results']
 
         calendar_objects = []
-        for p in pages :
-            properties = p['properties']  #TODO treat parsing error Exception
+        for p in pages:
+            properties = p['properties']  # TODO treat parsing error Exception
 
             page = {}
             page['start_date'] = properties['Date']['date']['start']
-            page['end_date'] =  properties['Date']['date']['end']
+            page['end_date'] = properties['Date']['date']['end']
             page['name'] = properties['Name']['title'][0]['plain_text']
             page['icon'] = p['icon']
 
             calendar_objects.append(page)
     else:
         print(f"Error {response.status_code}: {response.text}")
-    return  __list_to_map(calendar_objects)
+    return __list_to_map(calendar_objects)
 
-def __list_to_map(pages) :
+
+def __list_to_map(pages):
     map = {}
-    for page in pages :
+    for page in pages:
         l = []
-        if (page['end_date']) : 
-            diff = datetime.strptime(page['end_date'], '%Y-%m-%d') - datetime.strptime(page['start_date'], '%Y-%m-%d')
-            #TODO datetime range for
-            #print(diff)
-            #print(type(diff)) #delta
+        if (page['end_date']):
+            diff = datetime.strptime(
+                page['end_date'], '%Y-%m-%d') - datetime.strptime(page['start_date'], '%Y-%m-%d')
+            # TODO datetime range for
+            # print(diff)
+            # print(type(diff)) #delta
         start_date = page['start_date']
-        map[start_date] = [page] if map.get(start_date) is None else list(map.get(start_date))+[page]
+        map[start_date] = [page] if map.get(
+            start_date) is None else list(map.get(start_date))+[page]
     return map
+
+
 if __name__ == '__main__':
     query_a_database()
