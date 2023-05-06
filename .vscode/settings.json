@@ -1,6 +1,4 @@
 {
-  "javascript.updateImportsOnFileMove.enabled": "never",
-  "workbench.colorTheme": "Visual Studio Light",
   "[python]": {
       "editor.formatOnSave": true,
       "editor.formatOnType": true,
