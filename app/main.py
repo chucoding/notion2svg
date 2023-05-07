@@ -13,7 +13,7 @@ cal = NotionCalendar()
 
 @app.get('/')
 def show_calendar():
-    return Response(content=cal.get_calendar(), headers={"Cache-Control": "max-age=0"}, media_type="image/svg+xml")
+    return Response(content=cal.get_calendar(), headers={"Cache-Control": "max-age=0", "Content-Security-Policy": "object-src href: 'unsafe-eval'"}, media_type="image/svg+xml")
 
 
 if __name__ == '__main__':
