@@ -6,7 +6,6 @@ import requests
 
 def query_a_database():
 
-    today = date.today()
     url = f"https://api.notion.com/v1/databases/{os.getenv('db')}/query"
     headers = {
         "Authorization": f"Bearer secret_{os.getenv('auth')}",
@@ -14,8 +13,8 @@ def query_a_database():
         "Notion-Version": "2022-02-22",
     }
 
+    today = date.today()
     params = {
-
         "filter": {
             "property": "Date",
             "date": {
@@ -23,6 +22,7 @@ def query_a_database():
             }
         }
     }
+
     response = requests.post(url, headers=headers, json=params)
 
     if response.status_code == 200:
@@ -46,17 +46,11 @@ def query_a_database():
 
 
 def list_to_map(pages):
-    print(pages)
     map = {}
     for page in pages:
-        # if (page['end_date']):
-        # diff = datetime.strptime(
-        #   page['end_date'], '%Y-%m-%d') - datetime.strptime(page['start_date'], '%Y-%m-%d')
-        # print(diff)
         start_date = page['start_date']
         map[start_date] = [page] if map.get(
             start_date) is None else list(map.get(start_date))+[page]
-        print(map)
     return map
 
 
