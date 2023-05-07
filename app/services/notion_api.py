@@ -1,21 +1,21 @@
-from datetime import date, datetime
+import os
+from datetime import date
 
 import requests
-
-import config
 
 
 def query_a_database():
 
     today = date.today()
-    url = f"https://api.notion.com/v1/databases/{config.db}/query"
+    url = f"https://api.notion.com/v1/databases/{os.getenv('db')}/query"
     headers = {
-        "Authorization": f"Bearer secret_{config.auth}",
+        "Authorization": f"Bearer secret_{os.getenv('auth')}",
         "Accept": "application/json",
         "Notion-Version": "2022-02-22",
     }
 
     params = {
+
         "filter": {
             "property": "Date",
             "date": {
@@ -46,6 +46,7 @@ def query_a_database():
 
 
 def list_to_map(pages):
+    print(pages)
     map = {}
     for page in pages:
         # if (page['end_date']):
