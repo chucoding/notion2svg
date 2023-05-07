@@ -1,18 +1,18 @@
 import calendar
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
 from datetime import datetime
 
 from app.services import notion_api
 
 
-class Calendar(metaclass=ABCMeta):
-    now = datetime.now()
-    date = now.strftime("%Y %b %m %X").split(" ")
+class Calendar(ABC):
 
-    year, str_month, month, time = date[0], date[1], int(date[2]), date[3]
-    today = now.date().isoformat()
-
-    weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    def __init__(self):
+        self.now = datetime.now()
+        self.date = self.now.strftime("%Y %b %m %X").split(" ")
+        self.year, self.str_month, self.month, self.time = self.date
+        self.today = self.now.date().isoformat()
+        self.weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
     @abstractmethod
     def get_calendar(self):
@@ -20,26 +20,28 @@ class Calendar(metaclass=ABCMeta):
 
 
 class NotionCalendar(Calendar):
+    def __init__(self):
+        super().__init__()
 
     def get_calendar(self):
         notion_pages = notion_api.query_a_database()
-        svg_weeks = ''
-        for i, w in enumerate(Calendar.weeks):
-            svg_weeks += "<text x='%d' y='70' font-size='10px' fill='#9A9B97'>%s</text>\n" % (
-                120*(i)+55, w)
+        svg_weeks = "".join(
+            f"<text x='{120 * i + 55}' y='70' font-size='10px' fill='#9A9B97'>{w}</text>\n"
+            for i, w in enumerate(self.weeks)
+        )
 
         svg_days = ''
         stack = []
-        for i, week in enumerate(calendar.Calendar().monthdatescalendar(int(self.year), self.month)):
+        for i, week in enumerate(calendar.Calendar().monthdatescalendar(int(self.year), int(self.month))):
             use_stack = True
             for j, day in enumerate(week):
                 date = day.isoformat()
                 # current month => fill black color for day / other month => fill gray color for day
                 color = "black" if day.strftime(
-                    '%b') == Calendar.now.strftime('%b') else "#9A9B97"
+                    '%b') == self.now.strftime('%b') else "#9A9B97"
 
                 # today => display red circle mark
-                if Calendar.today == date:
+                if self.today == date:
                     color = "white"
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (
                         120*(j)+105, (80*(i)+95))
