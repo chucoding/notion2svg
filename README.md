@@ -1,13 +1,19 @@
-# notion2svg
+## notion2svg
 notion2svg is an app that converts Notion Calendar View to SVG format.
 
-# Usage
-- start : uvicorn main:app --reload or python -m uvicorn main:app --reload
-- swagger ui : https://notion2github.herokuapp.com/docs
-- redoc : https://notion2github.herokuapp.com/redoc
+<img height="550em" border="1px solid black" src="https://notion2svg-chucoding.koyeb.app">
 
-# Articles
+## Skills
+
+<div align=left>
+  <img src="https://img.shields.io/badge/Python v3-3776AB?style=for-the-badge&logo=Python&logoColor=white">
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white">
+  <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
+</div>
+<br/>
+
+## Articles
 [Python 프로젝트에 Prettier 적용하기](https://chucoding.tistory.com/114)
 
-# Contact
-chucoding@gmail.com
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
