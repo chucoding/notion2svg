@@ -8,7 +8,7 @@ notion2svg is an app that converts Notion Calendar View to SVG format.
 <div align=left>
   <img src="https://img.shields.io/badge/Python v3-3776AB?style=for-the-badge&logo=Python&logoColor=white">
   <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white">
-  <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
+  <img src="https://img.shields.io/badge/Notion api-000000?style=for-the-badge&logo=Notion&logoColor=white">
 </div>
 <br/>
 
