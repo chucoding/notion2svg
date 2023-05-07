@@ -88,6 +88,7 @@ class NotionCalendar(Calendar):
                         svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (
                             120*(j)+3, (80*(i)+110+alpha), width-6)
 
+                        # Icon is not available on github due to csp policy
                         if notion_page['icon'] is not None:
                             if notion_page['icon']['type'] == "emoji":
                                 svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
