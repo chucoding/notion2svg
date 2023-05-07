@@ -30,7 +30,7 @@ class NotionCalendar(Calendar):
 
         svg_days = ''
         stack = []
-        for i, week in enumerate(calendar.Calendar().monthdatescalendar(2022, self.month)):
+        for i, week in enumerate(calendar.Calendar().monthdatescalendar(int(self.year), self.month)):
             use_stack = True
             for j, day in enumerate(week):
                 date = day.isoformat()
