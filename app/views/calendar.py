@@ -97,6 +97,11 @@ class NotionCalendar(Calendar):
                                     j)+6, (68*(i)+112+alpha), notion_page['icon']['file']['url'].replace("&", "&amp;"))
                                 svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
                                     120*(j)+26, (80*(i)+125+alpha), notion_page_name)
+                            elif notion_page['icon']['type'] == "external":
+                                svg_days += "<image x='%d' y='%d' width='15' height='15' href='%s' />" % (120*(
+                                    j)+6, (68*(i)+112+alpha), notion_page['icon']['external']['url'].replace("&", "&amp;"))
+                                svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
+                                    120*(j)+26, (80*(i)+125+alpha), notion_page_name)
                         else:
                             svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
                                 120*(j)+5, (80*(i)+125+alpha), notion_page_name)
