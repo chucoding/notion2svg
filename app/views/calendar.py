@@ -42,6 +42,7 @@ class NotionCalendar(Calendar):
 
                 # today => display red circle mark
                 if self.today == date:
+                    print("오늘 날짜 : "+self.today)
                     color = "white"
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (
                         120*(j)+105, (80*(i)+95))
@@ -54,6 +55,7 @@ class NotionCalendar(Calendar):
                         width = 120 * \
                             ((datetime.strptime(
                                 stack[-1].get('end_date'), '%Y-%m-%d').date() - week[0]).days+1)
+                        print(len(stack))
                         stack.pop()
                     else:
                         use_stack = False
@@ -77,12 +79,15 @@ class NotionCalendar(Calendar):
                                 width += 120 * \
                                     (week[-1] - datetime.strptime(date,
                                      '%Y-%m-%d').date()).days
+                                stack.append(notion_page)
                             else:
                                 width += 120 * \
                                     (datetime.strptime(end_date, '%Y-%m-%d') -
                                      datetime.strptime(date, '%Y-%m-%d')).days
-                            stack.append(notion_page)
+                            # print(date)
+                            # print(notion_page)
                             use_stack = False
+
                         notion_page_name = (bytes(notion_page["name"], 'utf-8')[0:12*int(width/120)+12*int(width/120-1)]).decode(
                             'utf-8')+"..." if len(bytes(notion_page["name"], 'utf-8')) > 12*int(width/120)+12*int(width/120-1) else notion_page["name"]
                         svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (
