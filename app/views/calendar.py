@@ -8,10 +8,6 @@ from app.services import notion_api
 class Calendar(ABC):
 
     def __init__(self):
-        self.now = datetime.now()
-        self.date = self.now.strftime("%Y %b %m %X").split(" ")
-        self.year, self.str_month, self.month, self.time = self.date
-        self.today = self.now.date().isoformat()
         self.weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
     @abstractmethod
@@ -24,6 +20,12 @@ class NotionCalendar(Calendar):
         super().__init__()
 
     def get_calendar(self):
+
+        now = datetime.now()
+        date = now.strftime("%Y %b %m %X").split(" ")
+        year, str_month, month, time = date
+        today = now.date().isoformat()
+
         notion_pages = notion_api.query_a_database()
         svg_weeks = "".join(
             f"<text x='{120 * i + 55}' y='70' font-size='10px' fill='#9A9B97'>{w}</text>\n"
@@ -32,17 +34,16 @@ class NotionCalendar(Calendar):
 
         svg_days = ''
         stack = []
-        for i, week in enumerate(calendar.Calendar().monthdatescalendar(int(self.year), int(self.month))):
+        for i, week in enumerate(calendar.Calendar().monthdatescalendar(int(year), int(month))):
             use_stack = True
             for j, day in enumerate(week):
                 date = day.isoformat()
                 # current month => fill black color for day / other month => fill gray color for day
                 color = "black" if day.strftime(
-                    '%b') == self.now.strftime('%b') else "#9A9B97"
+                    '%b') == now.strftime('%b') else "#9A9B97"
 
                 # today => display red circle mark
-                if self.today == date:
-                    print("오늘 날짜 : "+self.today)
+                if today == date:
                     color = "white"
                     svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (
                         120*(j)+105, (80*(i)+95))
@@ -138,7 +139,7 @@ class NotionCalendar(Calendar):
                 {svg_days}
             </svg>
             '''.format(
-            month=self.str_month+" "+self.year,
+            month=str_month+" "+year,
             svg_weeks=svg_weeks,
             svg_days=svg_days
         )
