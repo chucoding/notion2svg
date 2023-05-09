@@ -49,6 +49,9 @@ class NotionCalendar(Calendar):
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (
                     120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
 
+                if stack and date == stack[-1].get('end_date') :
+                    stack.pop()
+
                 if stack and use_stack:
                     alpha = 25*(len(stack)-1)
                     if datetime.strptime(stack[-1].get('end_date'), '%Y-%m-%d').date() <= week[-1]:
@@ -74,18 +77,17 @@ class NotionCalendar(Calendar):
                         alpha = 25*len(stack)
 
                         # merge start_date to end_date
-                        if end_date is not None:
+                        if end_date is not None: 
                             if datetime.strptime(end_date, '%Y-%m-%d').date() > week[-1]:
                                 width += 120 * \
                                     (week[-1] - datetime.strptime(date,
-                                     '%Y-%m-%d').date()).days
-                                stack.append(notion_page)
+                                     '%Y-%m-%d').date()).days 
                             else:
                                 width += 120 * \
                                     (datetime.strptime(end_date, '%Y-%m-%d') -
                                      datetime.strptime(date, '%Y-%m-%d')).days
-                            # print(date)
-                            # print(notion_page)
+                                
+                            stack.append(notion_page)
                             use_stack = False
 
                         notion_page_name = (bytes(notion_page["name"], 'utf-8')[0:12*int(width/120)+12*int(width/120-1)]).decode(
