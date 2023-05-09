@@ -42,9 +42,13 @@ def query_a_database():
             calendar_objects.append(page)
     else:
         print(f"Error {response.status_code}: {response.text}")
+
     return list_to_map(calendar_objects)
 
-
+"""
+Returns:
+    map (key : date, value : notion object)
+"""
 def list_to_map(pages):
     map = {}
     for page in pages:
