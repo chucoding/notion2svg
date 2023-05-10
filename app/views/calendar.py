@@ -1,14 +1,15 @@
 import calendar
+import pytz
 from abc import ABC, abstractmethod
 from datetime import datetime
 
 from app.services import notion_api
 
-
 class Calendar(ABC):
 
     def __init__(self):
         self.weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        self.tz = pytz.timezone('Asia/Seoul')
 
     @abstractmethod
     def get_calendar(self):
@@ -21,7 +22,8 @@ class NotionCalendar(Calendar):
 
     def get_calendar(self):
 
-        now = datetime.now()
+        now = datetime.now(tz=self.tz)
+        print(now)
         date = now.strftime("%Y %b %m %X").split(" ")
         year, str_month, month, time = date
         today = now.date().isoformat()
