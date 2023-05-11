@@ -93,8 +93,12 @@ class NotionCalendar(Calendar):
                             stack.append(notion_page)
                             use_stack = False
 
-                        notion_page_name = (bytes(notion_page["name"], 'utf-8')[0:12*int(width/120)+12*int(width/120-1)]).decode(
-                            'utf-8')+"..." if len(bytes(notion_page["name"], 'utf-8')) > 12*int(width/120)+12*int(width/120-1) else notion_page["name"]
+                        notion_page_name = notion_page["name"]
+                        name_bytes = notion_page_name.encode('utf-8')
+
+                        truncated_bytes = name_bytes[:12 * int(width / 120) + 12 * int(width / 120 - 1)]
+                        decoded_name = truncated_bytes.decode('utf-8', 'ignore') + "..." if len(name_bytes) > 12 * int(width / 120) + 12 * int(width / 120 - 1) else notion_page_name
+
                         svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (
                             120*(j)+3, (80*(i)+110+alpha), width-6)
 
@@ -102,20 +106,20 @@ class NotionCalendar(Calendar):
                         if notion_page['icon'] is not None:
                             if notion_page['icon']['type'] == "emoji":
                                 svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
-                                    120*(j)+5, (80*(i)+125+alpha), notion_page['icon']['emoji']+" "+notion_page_name)
+                                    120*(j)+5, (80*(i)+125+alpha), notion_page['icon']['emoji']+" "+decoded_name)
                             elif notion_page['icon']['type'] == "file":
                                 svg_days += "<image x='%d' y='%d' width='15' height='15' href='%s' />" % (120*(
                                     j)+6, (68*(i)+112+alpha), notion_page['icon']['file']['url'].replace("&", "&amp;"))
                                 svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
-                                    120*(j)+26, (80*(i)+125+alpha), notion_page_name)
+                                    120*(j)+26, (80*(i)+125+alpha), decoded_name)
                             elif notion_page['icon']['type'] == "external":
                                 svg_days += "<image x='%d' y='%d' width='15' height='15' href='%s' />" % (120*(
                                     j)+6, (68*(i)+112+alpha), notion_page['icon']['external']['url'].replace("&", "&amp;"))
                                 svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
-                                    120*(j)+26, (80*(i)+125+alpha), notion_page_name)
+                                    120*(j)+26, (80*(i)+125+alpha), decoded_name)
                         else:
                             svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
-                                120*(j)+5, (80*(i)+125+alpha), notion_page_name)
+                                120*(j)+5, (80*(i)+125+alpha), decoded_name)
         return '''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
