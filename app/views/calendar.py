@@ -37,7 +37,7 @@ class NotionCalendar(Calendar):
         svg_days = ''
         stack = []
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(int(year), int(month))):
-            use_stack = True
+            use_stack = True   # svg rendering
             for j, day in enumerate(week):
                 date = day.isoformat()
                 # current month => fill black color for day / other month => fill gray color for day
@@ -52,16 +52,17 @@ class NotionCalendar(Calendar):
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (
                     120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
 
-                if stack and date == stack[-1].get('end_date') :
+                # If there is an end_date schedule on the stack, delete it.
+                while stack and date == stack[-1].get('end_date'):
                     stack.pop()
 
+                # If there is an end_date in this week, remove it from the stack
                 if stack and use_stack:
                     alpha = 25*(len(stack)-1)
                     if datetime.strptime(stack[-1].get('end_date'), '%Y-%m-%d').date() <= week[-1]:
                         width = 120 * \
                             ((datetime.strptime(
                                 stack[-1].get('end_date'), '%Y-%m-%d').date() - week[0]).days+1)
-                        print(len(stack))
                         stack.pop()
                     else:
                         use_stack = False
