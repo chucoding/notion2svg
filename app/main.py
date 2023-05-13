@@ -3,7 +3,7 @@ import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, Response
 
-from app.views.calendar import NotionCalendar
+from app.modules.calendar import NotionCalendar
 
 load_dotenv()
 

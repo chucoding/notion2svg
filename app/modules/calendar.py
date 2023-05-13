@@ -3,7 +3,7 @@ import pytz
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from app.services import notion_api
+from app.modules import notion_api
 
 class Calendar(ABC):
 

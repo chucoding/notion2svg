@@ -1,2 +1,2 @@
 from app import *
-from app.views import *
+from app.modules import *
