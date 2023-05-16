@@ -1,7 +1,9 @@
-## notion2svg
-notion2svg is an app that converts Notion Calendar View to SVG format.
+# notion2svg
 
 <img height="550em" border="1px solid black" src="https://notion2svg-chucoding.koyeb.app">
+
+## Description
+notion2svg is an app that converts Notion Calendar View to SVG format.
 
 ## Skills
 
