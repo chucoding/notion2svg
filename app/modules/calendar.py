@@ -79,8 +79,7 @@ class NotionCalendar(Calendar):
 
                         end_date = notion_page.get("end_date")
                         width = 120
-                        alpha = 25*len(stack)
-
+                        alpha = 25* ( len(stack) if len(stack) > 0 else len(stack)+k)
                         # merge start_date to end_date
                         if end_date is not None: 
                             if datetime.strptime(end_date, '%Y-%m-%d').date() > week[-1]:
@@ -100,7 +99,6 @@ class NotionCalendar(Calendar):
                         truncated_bytes = name_bytes[:12 * int(width / 120) + 12 * int(width / 120 - 1)]
                         decoded_name = truncated_bytes.decode('utf-8', 'ignore') + "..." if len(name_bytes) > 12 * int(width / 120) + 12 * int(width / 120 - 1) else notion_page_name
 
-                        
                         svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (
                             120*(j)+3, (80*(i)+110+alpha), width-6)
 
