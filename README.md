@@ -16,6 +16,7 @@ notion2svg is an app that converts Notion Calendar View to SVG format.
 
 ## Articles
 [Python 프로젝트에 Prettier 적용하기](https://chucoding.tistory.com/114)
+[Github 리드미에 달력 표시하기 - 1탄](https://chucoding.tistory.com/115)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
