@@ -51,9 +51,9 @@ class NotionCalendar(Calendar):
                         120*(j)+105, (80*(i)+95))
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (
                     120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
-                
+
                 # If there is an end_date schedule on the stack, delete it.
-                while stack and date == stack[-1].get('end_date'):
+                while stack and (date == stack[-1].get('end_date') or stack[-1].get('end_date') == stack[-1].get('start_date')):
                     stack.pop()
 
                 # If there is an end_date in this week, remove it from the stack
