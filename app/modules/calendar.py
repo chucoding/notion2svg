@@ -23,9 +23,9 @@ class NotionCalendar(Calendar):
     def get_calendar(self):
 
         now = datetime.now(tz=self.tz)
-        print(now)
-        date = now.strftime("%Y %b %m %X").split(" ")
-        year, str_month, month, time = date
+        print("[today's date] ",now)
+        date = now.strftime("%Y %b %m").split(" ")
+        year, str_month, month = date
         today = now.date().isoformat()
 
         notion_pages = notion_api.query_a_database()
@@ -35,7 +35,7 @@ class NotionCalendar(Calendar):
         )
 
         svg_days = ''
-        stack = [] #원하는걸 pop하지 못하는 이슈가 있음. 자료구조 뭐 쓸지에 대해 고민 좀 더 해봐야 한다.
+        stack = []
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(int(year), int(month))):
             use_stack = True   # svg rendering
             for j, day in enumerate(week):
@@ -52,17 +52,9 @@ class NotionCalendar(Calendar):
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (
                     120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
 
-                if date == '2023-05-21' :
-                    print(date)
-                    print(stack[-1].get('end_date'))
-                    print(date == stack[-1].get('end_date'))
-
                 # If there is an end_date schedule on the stack, delete it.
                 while stack and (date == stack[-1].get('end_date') or stack[-1].get('end_date') == stack[-1].get('start_date')):
                     stack.pop()
-
-                if date == '2023-05-21' :
-                    print(stack)
 
                 # If there is an end_date in this week, remove it from the stack
                 if stack and use_stack:
