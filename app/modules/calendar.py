@@ -47,10 +47,8 @@ class NotionCalendar(Calendar):
                 # today => display red circle mark
                 if today == date:
                     color = "white"
-                    svg_days += "<circle cx='%d' cy='%d' r='10' fill='#EB5757'/>" % (
-                        120*(j)+105, (80*(i)+95))
-                svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (
-                    120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
+                    svg_days += f"<circle cx='{120*(j)+105}' cy='{80*(i)+95}' r='10' fill='#EB5757'/>"
+                svg_days += f"<text x='{120*(j)+100}' y='{80*(i)+100}' font-size='12px' fill='{color}'>{day.strftime('%d')}</text>"
 
                 # If there is an end_date schedule on the deq, delete it.
                 while deq and (date == deq[-1].get('end_date') or deq[-1].get('end_date') == deq[-1].get('start_date')):
@@ -63,8 +61,7 @@ class NotionCalendar(Calendar):
                         width = 120 * \
                             ((datetime.strptime(
                                 deq[-1].get('end_date'), '%Y-%m-%d').date() - week[0]).days+1)
-                        svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (
-                            120*(j)+3, (80*(i)+110+alpha), width-6)
+                        svg_days += f"<rect x='{120*(j)+3}' y='{80*(i)+110+alpha}' width='{width-6}' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />"
                         use_deq = False
                     elif datetime.strptime(deq[-1].get('end_date'), '%Y-%m-%d').date() == week[-1]:
                         deq.pop()
@@ -102,34 +99,29 @@ class NotionCalendar(Calendar):
                         truncated_bytes = name_bytes[:12 * int(width / 120) + 12 * int(width / 120 - 1)]
                         decoded_name = truncated_bytes.decode('utf-8', 'ignore') + "..." if len(name_bytes) > 12 * int(width / 120) + 12 * int(width / 120 - 1) else notion_page_name
 
-                        svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (
-                            120*(j)+3, (80*(i)+110+alpha), width-6)
+                        svg_days += f"<rect x='{120*(j)+3}' y='{80*(i)+110+alpha}' width='{width-6}' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />"
 
                         # Icon is not available on github due to csp policy
                         if notion_page['icon'] is not None:
                             if notion_page['icon']['type'] == "emoji":
-                                svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
-                                    120*(j)+5, (80*(i)+125+alpha), notion_page['icon']['emoji']+" "+decoded_name)
+                                svg_days += f"<text x='{120*(j)+5}' y='{80*(i)+125+alpha}' font-size='12px'>{notion_page['icon']['emoji']} {decoded_name}</text>"
                             elif notion_page['icon']['type'] == "file":
-                                svg_days += "<image x='%d' y='%d' width='15' height='15' href='%s' />" % (120*(
-                                    j)+6, (68*(i)+112+alpha), notion_page['icon']['file']['url'].replace("&", "&amp;"))
-                                svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
-                                    120*(j)+26, (80*(i)+125+alpha), decoded_name)
+                                escaped_img_url = notion_page['icon']['file']['url'].replace("&", "&amp;")
+                                svg_days += f"<image x='{120*(j)+6}' y='{68*(i)+112+alpha}' width='15' height='15' href='{escaped_img_url}' />"
+                                svg_days += f"<text x='{120*(j)+26}' y='{80*(i)+125+alpha}' font-size='12px'>{decoded_name}</text>"
                             elif notion_page['icon']['type'] == "external":
-                                svg_days += "<image x='%d' y='%d' width='15' height='15' href='%s' />" % (120*(
-                                    j)+6, (68*(i)+112+alpha), notion_page['icon']['external']['url'].replace("&", "&amp;"))
-                                svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
-                                    120*(j)+26, (80*(i)+125+alpha), decoded_name)
+                                escaped_icon_url = notion_page['icon']['external']['url'].replace("&", "&amp;")
+                                svg_days += f"<image x='{120*(j)+6}' y='{68*(i)+112+alpha}' width='15' height='15' href='{escaped_icon_url}' />"
+                                svg_days += f"<text x='{120*(j)+26}' y='{80*(i)+125+alpha}' font-size='12px'>{decoded_name}</text>"
                         else:
-                            svg_days += "<text x='%d' y='%d' font-size='12px'>%s</text>" % (
-                                120*(j)+5, (80*(i)+125+alpha), decoded_name)
+                            svg_days += f"<text x='{120*(j)+5}' y='{80*(i)+125+alpha}' font-size='12px'>{decoded_name}</text>"
                         
-        return '''
+        return f'''
             <!DOCTYPE svg PUBLIC
             "-//W3C//DTD SVG 1.1//EN"
             "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
             <svg version="1.1" width="840" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <text x="10" y="40" font-size="20" font-weight="bold">{month}</text>
+                <text x="10" y="40" font-size="20" font-weight="bold">{str_month} {year}</text>
                 {svg_weeks}
                 <rect x="600" y="80" width="240" height="480" fill="#F7F6F3"/>
                 <path style="stroke:#E9E9E7;" d="M0,80 L840,80"/>
@@ -148,8 +140,4 @@ class NotionCalendar(Calendar):
                 <path style="stroke:#E9E9E7;" d="M840,80 L840,560"/>
                 {svg_days}
             </svg>
-            '''.format(
-            month=str_month+" "+year,
-            svg_weeks=svg_weeks,
-            svg_days=svg_days
-        )
+            '''
