@@ -2,7 +2,7 @@ import calendar
 import pytz
 from abc import ABC, abstractmethod
 from datetime import datetime
-
+from collections import deque # import 순서가 있을까?
 from app.modules import notion_api
 
 class Calendar(ABC):
@@ -35,9 +35,9 @@ class NotionCalendar(Calendar):
         )
 
         svg_days = ''
-        stack = []
+        deq = deque()
         for i, week in enumerate(calendar.Calendar().monthdatescalendar(int(year), int(month))):
-            use_stack = True   # svg rendering
+            use_deq = True   # svg rendering
             for j, day in enumerate(week):
                 date = day.isoformat()
                 # current month => fill black color for day / other month => fill gray color for day
@@ -52,24 +52,24 @@ class NotionCalendar(Calendar):
                 svg_days += "<text x='%d' y='%d' font-size='12px' fill='%s'>%s</text>" % (
                     120*(j)+100, (80*(i)+100), color, day.strftime('%d'))
 
-                # If there is an end_date schedule on the stack, delete it.
-                while stack and (date == stack[-1].get('end_date') or stack[-1].get('end_date') == stack[-1].get('start_date')):
-                    stack.pop()
+                # If there is an end_date schedule on the deq, delete it.
+                while deq and (date == deq[-1].get('end_date') or deq[-1].get('end_date') == deq[-1].get('start_date')):
+                    deq.pop()
 
-                # If there is an end_date in this week, remove it from the stack
-                if stack and use_stack:
-                    alpha = 25*(len(stack)-1)
-                    if datetime.strptime(stack[-1].get('end_date'), '%Y-%m-%d').date() < week[-1]:
+                # If there is an end_date in this week, remove it from the deq
+                if deq and use_deq:
+                    alpha = 25*(len(deq)-1)
+                    if datetime.strptime(deq[-1].get('end_date'), '%Y-%m-%d').date() < week[-1]:
                         width = 120 * \
                             ((datetime.strptime(
-                                stack[-1].get('end_date'), '%Y-%m-%d').date() - week[0]).days+1)
+                                deq[-1].get('end_date'), '%Y-%m-%d').date() - week[0]).days+1)
                         svg_days += "<rect x='%d' y='%d' width='%d' height='20' rx='3' ry='3' stroke='#9A9B97' stroke-width='0.3' fill='white' />" % (
                             120*(j)+3, (80*(i)+110+alpha), width-6)
-                        use_stack = False
-                    elif datetime.strptime(stack[-1].get('end_date'), '%Y-%m-%d').date() == week[-1]:
-                        stack.pop()
+                        use_deq = False
+                    elif datetime.strptime(deq[-1].get('end_date'), '%Y-%m-%d').date() == week[-1]:
+                        deq.pop()
                     else:
-                        use_stack = False
+                        use_deq = False
                         width = 120*7
 
                 # display notion_pages into calendar
@@ -81,7 +81,7 @@ class NotionCalendar(Calendar):
 
                         end_date = notion_page.get("end_date")
                         width = 120
-                        alpha = 25* ( len(stack) if len(stack) > 0 else k)
+                        alpha = 25* ( len(deq) if len(deq) > 0 else k)
 
                         # merge start_date to end_date
                         if end_date is not None: 
@@ -93,8 +93,8 @@ class NotionCalendar(Calendar):
                                 width += 120 * \
                                     (datetime.strptime(end_date, '%Y-%m-%d') -
                                      datetime.strptime(date, '%Y-%m-%d')).days
-                            stack.append(notion_page)
-                            use_stack = False
+                            deq.append(notion_page)
+                            use_deq = False
 
                         notion_page_name = notion_page["name"]
                         name_bytes = notion_page_name.encode('utf-8')
