@@ -1,6 +1,7 @@
 
-import uvicorn
 from dotenv import load_dotenv
+import uvicorn
+
 from fastapi import FastAPI, Response
 
 from app.modules.calendar import NotionCalendar
