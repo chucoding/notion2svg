@@ -1,14 +1,13 @@
 from datetime import date
-import os
 
 import requests
 
 
-def query_a_database():
+def query_a_database(db, auth):
 
-    url = f"https://api.notion.com/v1/databases/{os.getenv('db')}/query"
+    url = f"https://api.notion.com/v1/databases/{db}/query"
     headers = {
-        "Authorization": f"Bearer secret_{os.getenv('auth')}",
+        "Authorization": f"Bearer secret_{auth}",
         "Accept": "application/json",
         "Notion-Version": "2022-02-22",
     }
