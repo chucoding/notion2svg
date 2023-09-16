@@ -3,12 +3,15 @@ from datetime import datetime
 import calendar
 import heapq
 
-from modules import notion_api
+import pytz
+
+from app.modules import notion_api
 
 class Calendar(ABC):
 
     def __init__(self):
         self.weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        self.tz = pytz.timezone('Asia/Seoul')
 
     @abstractmethod
     def get_calendar(self):
@@ -19,15 +22,15 @@ class NotionCalendar(Calendar):
     def __init__(self):
         super().__init__()
 
-    def get_calendar(self, db, auth):
+    def get_calendar(self):
 
-        now = datetime.now()
+        now = datetime.now(tz=self.tz)
         print("[today's date] ",now)
         date = now.strftime("%Y %b %m").split(" ")
         year, str_month, month = date
         today = now.date().isoformat()
 
-        notion_pages = notion_api.query_a_database(db, auth)
+        notion_pages = notion_api.query_a_database()
         svg_weeks = "".join(
             f"<text x='{120 * i + 55}' y='70' font-size='10px' fill='#9A9B97'>{w}</text>\n"
             for i, w in enumerate(self.weeks)
@@ -74,9 +77,6 @@ class NotionCalendar(Calendar):
 
                         if k > 1:
                             break
-
-                        print(notion_page);
-                        print(len(page_queue));
 
                         start_date = notion_page.get("start_date")
                         end_date = notion_page.get("end_date")
