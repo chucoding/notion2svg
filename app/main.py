@@ -3,7 +3,7 @@ import uvicorn
 
 from fastapi import FastAPI, Response
 
-from modules import calendar
+from .modules import calendar
 
 load_dotenv()
 
