@@ -1,15 +1,14 @@
-
 from dotenv import load_dotenv
 import uvicorn
 
 from fastapi import FastAPI, Response
 
-from .modules.calendar import NotionCalendar
+from modules import calendar
 
 load_dotenv()
 
 app = FastAPI()
-cal = NotionCalendar()
+cal = calendar.NotionCalendar()
 
 @app.get('/')
 def show_calendar():
